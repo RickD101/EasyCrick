@@ -4,7 +4,7 @@ class Api::UserController < ApplicationController
   # user CRUD methods
   def create
     if !User.find_by(username: user_params[:username])
-      new_user = User.create(user_params)
+      new_user = User.create!(user_params)
       render json: { message: "#{new_user.username} created." }
     else
       render json: { message: 'Username already exists.' }, status: :conflict
@@ -36,7 +36,12 @@ class Api::UserController < ApplicationController
   end
 
   def status
-    render json: { message: "#{@user_name} is logged in.", id: @user_id, username: @user_name }
+    render json: {
+      message: "#{@user_name} is logged in.",
+      id: @user_id,
+      username: @user_name,
+      login_expires: "#{(@token_expiry - Time.now.to_i)/60} minutes."
+    }
   end
 
   private

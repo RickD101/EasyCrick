@@ -14,6 +14,7 @@ class ApplicationController < ActionController::API
         payload = JWT.decode(auth_token, 'idontlikecricket')
         @user_id = payload[0]['id']
         @user_name = payload[0]['username']
+        @token_expiry = payload[0]['exp']
         true
       rescue StandardError
         false
