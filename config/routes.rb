@@ -16,9 +16,10 @@ Rails.application.routes.draw do
     get 'player/:id/teams', to: 'player#find_teams'
     resources :player
 
+    get 'match/search', to: 'match#find_by'
     resources :match
-
   end
 
-  get '*path', to: 'react#react_app', format: false
+  get 'players/all', to: 'query#list_all_players'
+  get 'players/:name', to: 'query#player_summary'
 end

@@ -1,7 +1,6 @@
 class Api::PlayerController < ApplicationController
-  before_action :user_authed, except: [:index, :show, :find_by, :find_teams]
+  before_action :user_authed
 
-  # public routes
   def index
     render json: Player.all
   end
@@ -18,7 +17,6 @@ class Api::PlayerController < ApplicationController
     render json: Player.find(params[:id]).teams.all
   end
 
-  # protected routes
   def create
     new_player = Player.create!(player_params)
     render json: { message: "#{new_player.name} created." }

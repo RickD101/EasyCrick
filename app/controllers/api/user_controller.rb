@@ -1,5 +1,5 @@
 class Api::UserController < ApplicationController
-  before_action :user_authed, except: [:create, :login]
+  before_action :user_authed, except: [:login]
 
   # user CRUD methods
   def create

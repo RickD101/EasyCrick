@@ -1,138 +1,115 @@
 class Api::MatchController < ApplicationController
-  before_action :user_authed, except: [:index, :show, :find_by]
+  before_action :user_authed
 
-  # public routes
   def index
     render json: Match.all
   end
 
   def show
-    match = Match.find(params[:id])
-    innings = match.innings.all
-
-    bat_innings = []
-    bowl_innings = []
-    extras = []
-    wickets = []
-
-    innings.each do |inning|
-      bat_innings.push(inning.bat_innings.all)
-      bowl_innings.push(inning.bowl_innings.all)
-      extras.push(inning.extra)
-      wickets.push(inning.wickets.all)
-    end
-
-    render json: {
-      match: match,
-      innings: innings,
-      bat_innings: bat_innings,
-      bowl_innings: bowl_innings,
-      extras: extras,
-      wickets: wickets
-    }
+    render json: populate_match(params[:id])
   end
 
   def find_by
     render json: Match.where(match_params)
   end
 
-  # protected routes
   def create
-    new_team = Team.create!(team_params)
-    render json: { message: "#{new_team.name} created." }
+    Match.create!(match_params)
+    render json: { message: 'Match created.' }
   end
 
   def update
-    upd_team = Team.update(params[:id], team_params)
-    render json: { message: "#{upd_team.name} updated." }
+    Match.update(params[:id], match_params)
+    render json: { message: 'Match updated.' }
   end
 
   def destroy
-    del_team = Team.find(params[:id]).delete
-    render json: { message: "#{del_team.name} deleted." }
-  end
-
-  def add_player
-    TeamPlayer.create!(team_id: params[:id].to_i, player_id: params[:player_id].to_i)
-    render json: { message: 'Association created.' }
-  end
-
-  def remove_player
-    TeamPlayer.where(team_id: params[:id].to_i, player_id: params[:player_id].to_i).destroy_all
-    render json: { message: 'Association deleted.' }
+    Match.destroy(params[:id])
+    render json: { message: 'Match deleted.' }
   end
 
   private
 
   def match_params
     params.required(:match).permit(
-      :name,
+      :date_played,
       :match_type,
       :competition,
-      :location
+      :location,
+      :away_team_id,
+      :home_team_id,
+      :outcome,
+      :summary,
+      innings_attributes: [
+        :_destroy,
+        :id,
+        :number,
+        :bat_team,
+        bat_innings_attributes: %i[
+          _destroy
+          id
+          player_id
+          fours
+          sixes
+          did_bat
+          position
+          is_keeper
+          is_captain
+          runs_scored
+          balls_faced
+        ],
+        bowl_innings_attributes: %i[
+          _destroy
+          id
+          player_id
+          dots
+          fours
+          sixes
+          wides
+          no_balls
+          did_bowl
+          position
+          runs_conceded
+          deliveries
+          maidens
+        ],
+        extras_attributes: %i[
+          _destroy
+          id
+          leg_byes
+          byes
+          penalties
+        ],
+        wickets_attributes: %i[
+          _destroy
+          id
+          batter_id
+          bowler_id
+          dismissal_type
+          fell_at
+          caught_by_id
+          run_out_by_id
+          stumped_by_id
+        ]
+      ]
     )
   end
 
-  def inning_params
-    params.required(:inning).permit(
-      :number,
-      :bat_team,
-      :bowl_team
-    )
-  end
+  def populate_match(id)
+    match = Match.find(id)
+    innings = match.innings.all
 
-  def bat_inning_params
-    params.required(:bat_inning).permit(
-      :player_id,
-      :dots,
-      :ones,
-      :twos,
-      :threes,
-      :fours,
-      :fives,
-      :sixes,
-      :out,
-      :did_bat,
-      :position,
-      :is_keeper,
-      :is_captain
-    )
-  end
+    match_hash = match.as_json
+    match_hash[:innings_attributes] = innings.as_json
 
-  def bowl_inning_params
-    params.required(:bowl_inning).permit(
-      :player_id,
-      :inning_id,
-      :dots,
-      :ones,
-      :twos,
-      :threes,
-      :fours,
-      :fives,
-      :sixes,
-      :wides,
-      :no_balls,
-      :did_bowl,
-      :position,
-      :is_keeper,
-      :is_captain
-    )
-  end
+    innings.all.each_with_index do |inning, i|
+      match_hash[:innings_attributes][i][:bat_innings_attributes] = inning.bat_innings.all.as_json
+      match_hash[:innings_attributes][i][:bowl_innings_attributes] = inning.bowl_innings.all.as_json
+      match_hash[:innings_attributes][i][:wickets_attributes] = inning.wickets.all.as_json
+      match_hash[:innings_attributes][i][:extras_attributes] = inning.extras.as_json
+    end
 
-  def extras_params
-    params.required(:extras).permit(
-      :leg_byes,
-      :byes
-    )
-  end
-
-  def wicket_params
-    params.required(:wicket).permit(
-      :name,
-      :match_type,
-      :competition,
-      :location
-    )
+    match_hash
   end
 
 end

@@ -27,4 +27,5 @@ class ApplicationController < ActionController::API
   def user_authed
     render json: { message: 'Please login.' }, status: :unauthorized unless decode_token
   end
+
 end
