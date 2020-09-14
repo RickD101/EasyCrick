@@ -1,4 +1,4 @@
-# EasyCrick - Cricket Scorecard & Stats Web App
+# EasyCrick - Cricket Scorecard & Stats API
 
 Readme here
 

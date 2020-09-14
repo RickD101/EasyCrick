@@ -32,7 +32,9 @@ Player.create([
                 { name: 'Chris Woakes', DOB: '02/03/1989', role: 'Allrounder', bat_style: 'Right-hand', bowl_style: 'Right-arm fast-medium' },
                 { name: 'Adil Rashid', DOB: '14/10/1988', role: 'Bowler', bat_style: 'Right-hand', bowl_style: 'Legbreak' },
                 { name: 'Jofra Archer', DOB: '01/04/1995', role: 'Bowler', bat_style: 'Right-hand', bowl_style: 'Right-arm fast' },
-                { name: 'Mark Wood', DOB: '11/01/1990', role: 'Bowler', bat_style: 'Right-hand', bowl_style: 'Right-arm fast' }
+                { name: 'Mark Wood', DOB: '11/01/1990', role: 'Bowler', bat_style: 'Right-hand', bowl_style: 'Right-arm fast' },
+                { name: 'Sam Curran', DOB: '03/06/1998', role: 'Allrounder', bat_style: 'Left-hand', bowl_style: 'Left-arm medium-fast' },
+                { name: 'Tom Curran', DOB: '12/03/1995', role: 'Bowling allrounder', bat_style: 'Right-hand', bowl_style: 'Right-arm fast-medium' }
               ])
 
 TeamPlayer.create([
@@ -137,7 +139,7 @@ Wicket.create!([
                  { inning_id: 1, batter_id: 5, bowler_id: 22, dismissal_type: 'lbw', fell_at: '8/273-282' },
                  { inning_id: 1, batter_id: 10, bowler_id: 19, dismissal_type: 'caught bowler', fell_at: '9/288-299', caught_by_id: 19 },
                  { inning_id: 2, batter_id: 12, bowler_id: 11, dismissal_type: 'caught bowler', fell_at: '1/7-23', caught_by_id: 11 },
-                 { inning_id: 2, batter_id: 14, bowler_id: 11, dismissal_type: 'caught behind', fell_at: '2/13-43', caught_by_id: 6 },
+                 { inning_id: 2, batter_id: 14, bowler_id: 11, dismissal_type: 'caught keeper', fell_at: '2/13-43', caught_by_id: 6 },
                  { inning_id: 2, batter_id: 15, bowler_id: 10, dismissal_type: 'caught', fell_at: '3/55-89', caught_by_id: 7 },
                  { inning_id: 2, batter_id: 16, bowler_id: 10, dismissal_type: 'caught', fell_at: '4/57-97', caught_by_id: 4 },
                  { inning_id: 2, batter_id: 13, bowler_id: 10, dismissal_type: 'caught', fell_at: '5/170-212', caught_by_id: 11 },

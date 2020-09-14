@@ -39,7 +39,7 @@ class QueryController < ApplicationController
     player_hash[:batting_stats][:not_outs] = bat_innings - dismissals
     player_hash[:batting_stats][:runs_scored] = runs_scored
     player_hash[:batting_stats][:high_score] = high_score
-    player_hash[:batting_stats][:batting_average] = (runs_scored.to_f / dismissals).round(2)
+    player_hash[:batting_stats][:batting_average] = (runs_scored / dismissals.to_f).round(2)
     player_hash[:batting_stats][:balls_faced] = balls_faced
     player_hash[:batting_stats][:batting_strike_rate] = ((runs_scored.to_f / balls_faced) * 100).round(2)
     player_hash[:batting_stats][:hundreds] = hundreds
